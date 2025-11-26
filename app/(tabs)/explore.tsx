@@ -1,112 +1,155 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
+import { useSelector } from 'react-redux';
 
-import { Collapsible } from '@/components/ui/collapsible';
-import { ExternalLink } from '@/components/external-link';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Fonts } from '@/constants/theme';
+import { Colors } from '@/constants/theme';
+import { RootState } from '@/redux/store';
 
-export default function TabTwoScreen() {
+export default function FavouritesScreen() {
+  const router = useRouter();
+  const themeMode = useSelector((state: RootState) => state.auth.themeMode);
+  const theme = Colors[themeMode];
+  const favorites = useSelector((state: RootState) => state.favorites.items);
+
+  const renderItem = ({ item, index }: { item: any; index: number }) => (
+    <Animated.View entering={FadeInDown.delay(index * 100).springify()}>
+      <TouchableOpacity
+        style={[styles.card, { backgroundColor: theme.card, shadowColor: theme.shadow }]}
+        onPress={() => router.push(`/details/${item.id}`)}
+        activeOpacity={0.9}
+      >
+        <Image source={{ uri: item.image }} style={styles.cardImage} />
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0.8)']}
+          style={styles.gradientOverlay}
+        >
+          <View style={styles.cardContent}>
+            <View style={styles.cardHeader}>
+              <View style={[styles.categoryBadge, { backgroundColor: theme.tint }]}>
+                <Text style={styles.categoryText}>{item.category}</Text>
+              </View>
+              <Ionicons name="heart" size={20} color="#FF4444" />
+            </View>
+            <Text style={styles.title}>{item.title}</Text>
+          </View>
+        </LinearGradient>
+      </TouchableOpacity>
+    </Animated.View>
+  );
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.headerTitle, { color: theme.text }]}>Favourites</Text>
+
+      {favorites.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <View style={[styles.emptyIcon, { backgroundColor: theme.card }]}>
+            <Ionicons name="heart-outline" size={64} color={theme.icon} />
+          </View>
+          <Text style={[styles.emptyText, { color: theme.text }]}>No favourites yet</Text>
+          <Text style={[styles.emptySubText, { color: theme.icon }]}>
+            Save your favorite workouts here!
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={favorites}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.list}
+          showsVerticalScrollIndicator={false}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText
-          type="title"
-          style={{
-            fontFamily: Fonts.rounded,
-          }}>
-          Explore
-        </ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image
-          source={require('@/assets/images/react-logo.png')}
-          style={{ width: 100, height: 100, alignSelf: 'center' }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful{' '}
-          <ThemedText type="defaultSemiBold" style={{ fontFamily: Fonts.mono }}>
-            react-native-reanimated
-          </ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  container: {
+    flex: 1,
+    paddingTop: 60,
+    paddingHorizontal: 20,
   },
-  titleContainer: {
+  headerTitle: {
+    fontSize: 32,
+    fontWeight: '800',
+    marginBottom: 20,
+  },
+  list: {
+    paddingBottom: 20,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -50,
+  },
+  emptyIcon: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  emptyText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  emptySubText: {
+    fontSize: 16,
+  },
+  card: {
+    borderRadius: 20,
+    marginBottom: 20,
+    height: 180,
+    overflow: 'hidden',
+    elevation: 5,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+  },
+  cardImage: {
+    width: '100%',
+    height: '100%',
+  },
+  gradientOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: '100%',
+    justifyContent: 'flex-end',
+    padding: 15,
+  },
+  cardContent: {
+    justifyContent: 'flex-end',
+  },
+  cardHeader: {
     flexDirection: 'row',
-    gap: 8,
+    justifyContent: 'space-between',
+    marginBottom: 5,
+    alignItems: 'center',
+  },
+  categoryBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  categoryText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+  },
+  title: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });

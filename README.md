@@ -1,50 +1,73 @@
-# Welcome to your Expo app 👋
+# FitBuddy 🏋️‍♂️
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+FitBuddy is a comprehensive React Native fitness application designed to help users track their workouts, calculate fitness metrics, and stay motivated. Built with **Expo** and **Redux Toolkit**, it features a modern, responsive UI with dark mode support.
 
-## Get started
+## 📱 Features
 
-1. Install dependencies
+### 🔐 Authentication
+- **User Registration & Login**: Create an account and log in securely.
+- **Local Persistence**: User data is saved locally using `AsyncStorage`, allowing you to log out and log back in with the same credentials.
+- **Profile Management**: View your stats and workout history.
 
-   ```bash
-   npm install
-   ```
+### 🏋️‍♀️ Exercise Library
+- **Dynamic Data**: Fetches exercise data from the **Wger API** (Open Source).
+- **Search & Filter**: Easily find workouts by name or category (Cardio, Strength, Flexibility, HIIT).
+- **Details View**: View comprehensive details including instructions and muscle groups.
+- **Favorites**: Save your go-to exercises for quick access.
 
-2. Start the app
+### 🧮 Fitness Tools
+- **BMI Calculator**: Calculate your Body Mass Index and see your weight category.
+- **Calories Burned Calculator**: Estimate calories burned based on activity type, duration, and weight.
 
-   ```bash
-   npx expo start
-   ```
+### 🎨 UI/UX
+- **Dark Mode**: Toggle between light and dark themes.
+- **Responsive Design**: Optimized for various screen sizes.
+- **Smooth Animations**: Uses `react-native-reanimated` for a polished feel.
 
-In the output, you'll find options to open the app in a
+## 🛠 Tech Stack
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- **Framework**: React Native (Expo SDK 50+)
+- **Routing**: Expo Router (File-based routing)
+- **State Management**: Redux Toolkit
+- **Styling**: StyleSheet, Expo Vector Icons
+- **API**: Axios (Wger API)
+- **Storage**: AsyncStorage
+- **Validation**: React Hook Form + Yup
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🚀 Getting Started
 
-## Get a fresh project
+1.  **Clone the repository**
+    ```bash
+    git clone <repository-url>
+    cd FitBuddy
+    ```
 
-When you're ready, run:
+2.  **Install dependencies**
+    ```bash
+    npm install
+    ```
 
-```bash
-npm run reset-project
-```
+3.  **Start the app**
+    ```bash
+    npx expo start -c
+    ```
+    *Note: The `-c` flag clears the cache to ensure a clean start.*
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+4.  **Run on Device/Emulator**
+    - Scan the QR code with **Expo Go** (Android/iOS).
+    - Press `a` for Android Emulator.
+    - Press `i` for iOS Simulator.
 
-## Learn more
+## 📝 API Note
 
-To learn more about developing your project with Expo, look at the following resources:
+This project uses the **Wger API** for exercise data. It is a free, open-source API that does not require an API key for basic usage, making it ideal for this demonstration.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 📂 Project Structure
 
-## Join the community
+- **`app/`**: Screens and navigation (Expo Router).
+- **`components/`**: Reusable UI components.
+- **`redux/`**: State management slices and store configuration.
+- **`services/`**: API integration and authentication logic.
+- **`constants/`**: Theme colors and configuration.
 
-Join our community of developers creating universal apps.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.

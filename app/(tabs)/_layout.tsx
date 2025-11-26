@@ -1,20 +1,31 @@
-import { Tabs } from 'expo-router';
 import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { RootState } from '@/redux/store';
+import { Ionicons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
+import { useSelector } from 'react-redux';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const themeMode = useSelector((state: RootState) => state.auth.themeMode);
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[themeMode].tabIconSelected,
         headerShown: false,
         tabBarButton: HapticTab,
+        tabBarStyle: {
+          backgroundColor: Colors[themeMode].card,
+          borderTopWidth: 0,
+          elevation: 0,
+          height: 60,
+          paddingBottom: 10,
+        },
       }}>
       <Tabs.Screen
         name="index"
@@ -28,6 +39,20 @@ export default function TabLayout() {
         options={{
           title: 'Explore',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="tools"
+        options={{
+          title: 'Tools',
+          tabBarIcon: ({ color }) => <Ionicons name="construct" size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
         }}
       />
     </Tabs>
